@@ -134,7 +134,7 @@ async function editarEstudiante(id, nuevoNombre, nuevoCorreo, nuevaClase) {
         Swal.fire({
             icon: 'success',
             title: '¡Editado!',
-            text: 'El estudiante ha sido editado con éxito.',
+            text: 'El estudiante ha sido editado con éxito, gracias.',
         });
         cargarEstudiantes();
     }
