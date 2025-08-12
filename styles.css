@@ -1,80 +1,162 @@
+:root {
+  --primary-color: #4f46e5;
+  --secondary-color: #a5b4fc;
+  --background-color: #f3f4f6;
+  --card-bg-color: #ffffff;
+  --text-color: #1f2937;
+  --shadow-light: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-hover: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
 body {
-  background-color: #f9f9f9;
-  font-family: 'Segoe UI', sans-serif;
+  font-family: 'Inter', sans-serif;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  margin: 0;
+  padding: 0;
   display: flex;
   justify-content: center;
-  padding: 40px;
-  margin: 0;
+  align-items: flex-start;
+  min-height: 100vh;
 }
 
-.contenedor {
-  background-color: white;
-  padding: 30px;
-  border-radius: 12px;
-  box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+.container {
+  max-width: 900px;
   width: 100%;
-  max-width: 600px;
+  padding: 20px;
+  margin-top: 40px;
 }
 
-h1, h2 {
-  color: #333;
-  margin-top: 20px;
+h1 {
   text-align: center;
+  color: var(--primary-color);
+  font-size: 2.5rem;
+  margin-bottom: 20px;
 }
 
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+h2 {
+  font-size: 1.5rem;
+  color: var(--text-color);
   margin-bottom: 15px;
+  border-bottom: 2px solid var(--secondary-color);
+  padding-bottom: 8px;
 }
 
-input, select {
-  padding: 10px;
-  font-size: 16px;
-  border: 1px solid #ccc;
+.card {
+  background-color: var(--card-bg-color);
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: var(--shadow-light);
+  margin-bottom: 20px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-hover);
+}
+
+input, select, button {
+  width: 100%;
+  padding: 12px;
   border-radius: 8px;
+  border: 1px solid #d1d5db;
+  font-size: 1rem;
+  margin-bottom: 10px;
+  box-sizing: border-box;
 }
 
 button {
-  padding: 10px 15px;
-  background-color: #1f8ef1;
+  background-color: var(--primary-color);
   color: white;
+  font-weight: 600;
   border: none;
-  border-radius: 8px;
   cursor: pointer;
-  font-weight: bold;
-  margin-top: 10px;
+  transition: background-color 0.2s ease, transform 0.2s ease;
 }
 
 button:hover {
-  background-color: #0c71c3;
+  background-color: #3730a3;
+  transform: translateY(-2px);
 }
 
 .cerrar-btn {
-  background-color: #e74c3c;
-  display: block;
-  width: 30%;
+  background-color: #ef4444;
+  width: auto;
+  float: right;
+  margin-top: 0;
+  padding: 8px 16px;
 }
 
-.cerrar:hover {
-  background-color: #c0392b;
+.cerrar-btn:hover {
+  background-color: #dc2626;
 }
 
 ul {
   list-style: none;
-  padding-left: 0;
+  padding: 0;
+  margin: 0;
 }
 
 ul li {
-  margin: 10px 0;
-  padding: 8px;
-  background-color: #f3f3f3;
-  border-radius: 6px;
+  background-color: var(--background-color);
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+ul li span {
+  flex-grow: 1;
+}
+
+ul li button {
+  width: auto;
+  margin-left: 10px;
+  padding: 6px 12px;
+  font-size: 0.9rem;
 }
 
 img {
-  display: block;
-  margin-top: 5px;
-  border-radius: 6px;
+  width: 100%;
+  max-width: 200px;
+  height: auto;
+  border-radius: 8px;
+  margin-top: 10px;
+  box-shadow: var(--shadow-light);
+}
+
+/* Estilos para el login y registro */
+#auth-container {
+  max-width: 400px;
+  width: 100%;
+  padding: 2rem;
+  background-color: var(--card-bg-color);
+  border-radius: 12px;
+  box-shadow: var(--shadow-light);
+  margin-top: 100px;
+  text-align: center;
+}
+
+#auth-container h2 {
+  text-align: center;
+  border-bottom: none;
+}
+
+#auth-container p {
+  font-size: 0.9rem;
+  color: #6b7280;
+}
+
+#auth-container a {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s ease;
+}
+
+#auth-container a:hover {
+  color: #3730a3;
 }
