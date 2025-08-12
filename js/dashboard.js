@@ -28,14 +28,29 @@ async function agregarEstudiante() {
     alert("Error al agregar: " + error.message);
   } else {
     alert("Estudiante agregado");
+    document.getElementById("nombre").value = "";
+    document.getElementById("correo").value = "";
+    document.getElementById("clase").value = "";
     cargarEstudiantes();
   }
 }
 
 async function cargarEstudiantes() {
+  const {
+    data: { user },
+    error: userError,
+  } = await client.auth.getUser();
+
+  if (userError || !user) {
+    alert("No estás autenticado.");
+    window.location.href = "index.html"; // Redirige al login si no hay usuario
+    return;
+  }
+  
   const { data, error } = await client
-    .from("estudiantes") //Nombre de BD
+    .from("estudiantes")
     .select("*")
+    .eq("user_id", user.id) // Filtra por el user_id para solo mostrar los del usuario logueado
     .order("created_at", { ascending: false });
 
   if (error) {
@@ -45,12 +60,69 @@ async function cargarEstudiantes() {
 
   const lista = document.getElementById("lista-estudiantes");
   lista.innerHTML = "";
+
   data.forEach((est) => {
     const item = document.createElement("li");
-    item.textContent = `${est.nombre} (${est.clase})`;
+    item.innerHTML = `
+      <span>${est.nombre} (${est.clase})</span>
+      <button onclick="editarEstudiantePrompt('${est.id}', '${est.nombre}', '${est.clase}')">Editar</button>
+      <button onclick="eliminarEstudiante('${est.id}')" class="cerrar-btn">Eliminar</button>
+    `;
     lista.appendChild(item);
   });
 }
+
+// --- NUEVAS FUNCIONES PARA EDITAR Y ELIMINAR ---
+
+// Pide nuevos datos y llama a la función de edición
+async function editarEstudiantePrompt(id, nombreActual, claseActual) {
+    const nuevoNombre = prompt("Nuevo nombre:", nombreActual);
+    const nuevaClase = prompt("Nueva clase:", claseActual);
+    
+    // Si el usuario cancela o no introduce datos, no hacemos nada
+    if (nuevoNombre === null || nuevaClase === null) {
+        return;
+    }
+    
+    // Llamamos a la función principal de edición
+    if (nuevoNombre !== "" && nuevaClase !== "") {
+        await editarEstudiante(id, nuevoNombre, nuevaClase);
+    }
+}
+
+// Función principal para editar un estudiante
+async function editarEstudiante(id, nuevoNombre, nuevaClase) {
+  const { data, error } = await client
+    .from("estudiantes")
+    .update({ nombre: nuevoNombre, clase: nuevaClase })
+    .eq("id", id); // Busca el estudiante por su ID
+
+  if (error) {
+    alert("Error al editar: " + error.message);
+  } else {
+    alert("Estudiante editado con éxito.");
+    cargarEstudiantes(); // Recarga la lista para ver los cambios
+  }
+}
+
+// Función para eliminar un estudiante
+async function eliminarEstudiante(id) {
+  if (confirm("¿Estás seguro de que quieres eliminar a este estudiante?")) {
+    const { error } = await client
+      .from("estudiantes")
+      .delete()
+      .eq("id", id); // Busca el estudiante por su ID y lo elimina
+
+    if (error) {
+      alert("Error al eliminar: " + error.message);
+    } else {
+      alert("Estudiante eliminado.");
+      cargarEstudiantes(); // Recarga la lista
+    }
+  }
+}
+
+// --- RESTO DE TU CÓDIGO (SIN CAMBIOS) ---
 
 cargarEstudiantes();
 
@@ -75,7 +147,7 @@ async function subirArchivo() {
 
   const nombreRuta = `${user.id}/${archivo.name}`;
   const { data, error } = await client.storage
-    .from("tareas") //Nombre del bucket
+    .from("tareas")
     .upload(nombreRuta, archivo, {
       cacheControl: "3600",
       upsert: false,
